@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscador de Almacén - Filtros</title>
+    <style>
+        :root { --cat-yellow: #FFCD00; --cat-black: #191919; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f4f4; margin: 0; padding: 20px; }
+        
+        .search-container { max-width: 900px; margin: 0 auto 30px auto; text-align: center; }
+        h2 { color: var(--cat-black); text-transform: uppercase; }
+        
+        /* Estilo de la barra de búsqueda */
+        #searchInput {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2rem;
+            border: 3px solid var(--cat-black);
+            border-radius: 8px;
+            outline: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        table { width: 100%; max-width: 1000px; margin: 0 auto; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        th { background: var(--cat-black); color: var(--cat-yellow); padding: 15px; text-align: left; }
+        td { padding: 12px; border-bottom: 1px solid #ddd; }
+        tr:hover { background-color: #fff9c4; }
+
+        .status-badge { padding: 5px 10px; border-radius: 15px; font-size: 0.8rem; font-weight: bold; }
+        .ok { background: #c8e6c9; color: #2e7d32; } /* Stock suficiente */
+        .low { background: #fff9c4; color: #f57f17; } /* Pedir pronto */
+        .empty { background: #ffcdd2; color: #c62828; } /* Agotado */
+    </style>
+</head>
+<body>
+
+<div class="search-container">
+    <h2>🔍 Control de Inventario Físico</h2>
+    <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Escribe N° de parte, marca o equipo (ej: 1R-1808 o D8R)...">
+</div>
+
+<table id="inventoryTable">
+    <thead>
+        <tr>    
+            <th>No. PARTE</th>
+            <th>MARCA</th>
+            <th>APLICACION</th>
+            <th>LOCALIZACION</th>
+            <th>STOCK</th>
+            <th>CONTEO</th>
+            <th>DISPONIBLE</th>
+        </tr>
+    </thead>
+    
+    <tbody>
+          <tr>  <td>    P551316 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A1001A  </td>   <td>    2   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    P782107 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A1001A  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    P782108 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A1001A  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    P782105 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A1001A  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    D41b10gvx   </td>   <td>    WIX </td>   <td>    0   </td>   <td>    A1001A  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    51849   </td>   <td>    WIX </td>   <td>    0   </td>   <td>    A1001A  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    57792   </td>   <td>    WIX </td>   <td>    0   </td>   <td>    A1001A  </td>   <td>    2   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    571-5253    </td>   <td>    CAT </td>   <td>    0   </td>   <td>    A1001A  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    pt189   </td>   <td>    Balwind </td>   <td>    0   </td>   <td>    A1001A  </td>   <td>    3   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    BF9903-SP   </td>   <td>    Balwind </td>   <td>    0   </td>   <td>    A1001A  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    33585xe </td>   <td>    WIX </td>   <td>    0   </td>   <td>    A1001A  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    wl10031 </td>   <td>    WIX </td>   <td>    0   </td>   <td>    A1001A  </td>   <td>    2   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    126-1813    </td>   <td>    CAT </td>   <td>    0   </td>   <td>    A1001A  </td>   <td>    2   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    571-5253    </td>   <td>    CAT </td>   <td>    0   </td>   <td>    A1001A  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    P181104 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A1002A  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    AF25065 </td>   <td>    Fleetguard  </td>   <td>    0   </td>   <td>    A1002A  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    711092a </td>   <td>    0   </td>   <td>    0   </td>   <td>    A1002A  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    B 421   </td>   <td>    CADECO  </td>   <td>    0   </td>   <td>    A1002A  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p532506 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A1002A  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p181120 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A1002A  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    B 7276  </td>   <td>    Balwind </td>   <td>    0   </td>   <td>    A1002A  </td>   <td>    3   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    42803   </td>   <td>    WIX </td>   <td>    0   </td>   <td>    A1002A  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p771508 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A1002A  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p611190 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A1002A  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p82889  </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A1002A  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    D782104 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A1002D  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p551329 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A1002D  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    AF 26397    </td>   <td>    Fleetguard  </td>   <td>    0   </td>   <td>    A1003A  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    42045   </td>   <td>    WIX </td>   <td>    0   </td>   <td>    A1003A  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    AF 4878 </td>   <td>    Fleetguard  </td>   <td>    0   </td>   <td>    A1003A  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p181120 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A1003A  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p771508 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A1003A  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    AF 25065    </td>   <td>    Fleetguard  </td>   <td>    0   </td>   <td>    A1003A  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p771508 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A1003A  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    46471   </td>   <td>    WIX </td>   <td>    0   </td>   <td>    A1003A  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    AF 26287M   </td>   <td>    Fleetguard  </td>   <td>    0   </td>   <td>    A1003A  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    AF 4060 </td>   <td>    Fleetguard  </td>   <td>    0   </td>   <td>    A1003A  </td>   <td>    2   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    AF 1767 </td>   <td>    Fleetguard  </td>   <td>    0   </td>   <td>    A1003A  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    AF 26397    </td>   <td>    Fleetguard  </td>   <td>    0   </td>   <td>    A1003A  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    AF 4150 </td>   <td>    Fleetguard  </td>   <td>    0   </td>   <td>    A1003A  </td>   <td>    2   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p182062 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A1003A  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    42803   </td>   <td>    WIX </td>   <td>    0   </td>   <td>    A1003A  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    P158677 </td>   <td>    0   </td>   <td>    0   </td>   <td>    A1003A  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    P158675 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A1003B  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p533781 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A1003B  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    pa2475  </td>   <td>    Balwind </td>   <td>    0   </td>   <td>    A1003B  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p611190 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A1003B  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p181137 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A1003B  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p181028 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A1003B  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p828889 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A1003B  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p611190 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A1003B  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p538008 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A1004A  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    AF 25065    </td>   <td>    Fleetguard  </td>   <td>    0   </td>   <td>    A1004A  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p538008 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A1004A  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p537877 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A1004A  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    AF 1843 </td>   <td>    Fleetguard  </td>   <td>    0   </td>   <td>    A1004A  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p527680 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A1004A  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p829333 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A1004A  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    H002433 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A1004A  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    42045   </td>   <td>    WIX </td>   <td>    0   </td>   <td>    A1004A  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p611189 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A1004A  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p606503 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A1004A  </td>   <td>    1   </td>   <td>    27/02/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    P553261 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A0101A  </td>   <td>    2   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p551423 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A0101A  </td>   <td>    2   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p550440 </td>   <td>    Donalson    </td>   <td>    750ir   </td>   <td>    A0101A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    ps19912 </td>   <td>    Fleetguard  </td>   <td>    bomba de agua, equivalente p550914  </td>   <td>    A0101A  </td>   <td>    2   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p551329 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A0101A  </td>   <td>    4   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p550914 </td>   <td>    Donalson    </td>   <td>    bomba john deere    </td>   <td>    A0101A  </td>   <td>    2   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    3360    </td>   <td>    WIX </td>   <td>    0   </td>   <td>    A0101A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    FS19831 </td>   <td>    Fleetguard  </td>   <td>    separador de agua para motor    </td>   <td>    A0101A  </td>   <td>    3   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    wf829   </td>   <td>    WIX </td>   <td>    0   </td>   <td>    A0101A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p550575 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A0101A  </td>   <td>    2   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    33638   </td>   <td>    WIX </td>   <td>    1311812 8f3 cadeco  </td>   <td>    A0101A  </td>   <td>    7   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    F60222  </td>   <td>    prucator    </td>   <td>    0   </td>   <td>    A0101A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p179342 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A0101A  </td>   <td>    2   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    lF3566  </td>   <td>    Fleetguard  </td>   <td>    0   </td>   <td>    A0101A  </td>   <td>    2   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    wf10054 </td>   <td>    WIX </td>   <td>    sf 10054    </td>   <td>    A0101A  </td>   <td>    2   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p550912 </td>   <td>    Donalson    </td>   <td>    compresor 700   </td>   <td>    A0101A  </td>   <td>    6   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p550774 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A0101A  </td>   <td>    3   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    FF2200  </td>   <td>    Fleetguard  </td>   <td>    0   </td>   <td>    A0101A  </td>   <td>    4   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p551828 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A0101A  </td>   <td>    3   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p550848 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A0101A  </td>   <td>    3   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p550880 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A0101A  </td>   <td>    2   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    FF5319  </td>   <td>    Fleetguard  </td>   <td>    0   </td>   <td>    A0101A  </td>   <td>    2   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p551361 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A0101A  </td>   <td>    2   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    BT9393-MPG  </td>   <td>    Balwind </td>   <td>    CAMION 773G </td>   <td>    A0101A  </td>   <td>    2   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p550867 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A0101A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p502504 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A0101A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    C 1124  </td>   <td>    sakura  </td>   <td>    0   </td>   <td>    A0101A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p552071 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A0101A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    tl 10111    </td>   <td>    purolator   </td>   <td>    0   </td>   <td>    A0101A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p550440 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A0101A  </td>   <td>    2   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    P165335 </td>   <td>    Donalson    </td>   <td>    duramax </td>   <td>    A0101A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p551311 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A0101A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    FS19831 </td>   <td>    Fleetguard  </td>   <td>    0   </td>   <td>    A0101A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p551433 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A0101A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p550900 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A0101A  </td>   <td>    4   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    BT8886.MPG  </td>   <td>    Balwind </td>   <td>    0   </td>   <td>    A0101A  </td>   <td>    2   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    P551110 </td>   <td>    Donalson    </td>   <td>    CAMION 773G </td>   <td>    A0101A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    wf2127  </td>   <td>    Fleetguard  </td>   <td>    0   </td>   <td>    A0101A  </td>   <td>    2   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    33548   </td>   <td>    WIX </td>   <td>    0   </td>   <td>    A0101A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p551047 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A0101A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    FS1040  </td>   <td>    Fleetguard  </td>   <td>    0   </td>   <td>    A0101A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    Bf1399-SP   </td>   <td>    Balwind </td>   <td>    0   </td>   <td>    A0101A  </td>   <td>    2   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    FS20007 </td>   <td>    Fleetguard  </td>   <td>    CAMION 773G, P551110, P551010   </td>   <td>    A0101A  </td>   <td>    2   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    FF5632  </td>   <td>    Fleetguard  </td>   <td>    0   </td>   <td>    A0101A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    FF5319  </td>   <td>    Fleetguard  </td>   <td>    0   </td>   <td>    A0101A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    33118   </td>   <td>    WIX </td>   <td>    0   </td>   <td>    A0101A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p550463 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A0101A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p551311 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A0101A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    FS19932 </td>   <td>    Fleetguard  </td>   <td>    0   </td>   <td>    A0101A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    FF5319  </td>   <td>    Fleetguard  </td>   <td>    0   </td>   <td>    A0101A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p551103 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A0101A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p551422 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A0101A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    FS19521 </td>   <td>    Fleetguard  </td>   <td>    0   </td>   <td>    A0101A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p550385 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A0101A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    wf10054 </td>   <td>    WIX </td>   <td>    0   </td>   <td>    A0101A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p550657 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A0101A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    33528   </td>   <td>    WIX </td>   <td>    p551313 </td>   <td>    A0101A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p550428 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A0101A  </td>   <td>    7   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    lFP5757 </td>   <td>    luber finer </td>   <td>    0   </td>   <td>    A0101A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p551807 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A0101A  </td>   <td>    4   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    lF3806  </td>   <td>    Fleetguard  </td>   <td>    p551018 </td>   <td>    A0101A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p551670 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A0101A  </td>   <td>    2   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    lF670   </td>   <td>    Fleetguard  </td>   <td>    p551670 </td>   <td>    A0101A  </td>   <td>    2   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p550777 </td>   <td>    Donalson    </td>   <td>    p550777 </td>   <td>    A0101A  </td>   <td>    2   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    lF9010  </td>   <td>    Fleetguard  </td>   <td>    0   </td>   <td>    A0101A  </td>   <td>    2   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p550595 </td>   <td>    Donalson    </td>   <td>    compresor 700   </td>   <td>    A0101A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    FF5317  </td>   <td>    Fleetguard  </td>   <td>    0   </td>   <td>    A0101A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    lF14000nn   </td>   <td>    Fleetguard  </td>   <td>    750ir   </td>   <td>    A0101A  </td>   <td>    3   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    P553000 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A0102A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p550779 </td>   <td>    Donalson    </td>   <td>    john deere  </td>   <td>    A0102A  </td>   <td>    3   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    lF3970  </td>   <td>    Fleetguard  </td>   <td>    0   </td>   <td>    A0102A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p550758 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A0102A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p555680 </td>   <td>    Donalson    </td>   <td>    hidro wolf  </td>   <td>    A0102A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    lF678   </td>   <td>    Fleetguard  </td>   <td>    p550020 barredora   </td>   <td>    A0102A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p550020 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A0102A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p165335 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A0102A  </td>   <td>    3   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p550949 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A0102A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    FF5624  </td>   <td>    Fleetguard  </td>   <td>    p565243 </td>   <td>    A0102A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    Hf6173  </td>   <td>    Fleetguard  </td>   <td>    banda movil </td>   <td>    A0102A  </td>   <td>    2   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    Hf35008 </td>   <td>    Fleetguard  </td>   <td>    p176324 </td>   <td>    A0102A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    51494   </td>   <td>    WIX </td>   <td>    p164378 </td>   <td>    A0102A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p551553 </td>   <td>    Donalson    </td>   <td>    p551551  345l   </td>   <td>    A0102A  </td>   <td>    2   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p551551 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A0102A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    lfF703  </td>   <td>    Fleetguard  </td>   <td>    0   </td>   <td>    A0102A  </td>   <td>    2   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    Hf28938 </td>   <td>    Fleetguard  </td>   <td>    0   </td>   <td>    A0102A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p179308 </td>   <td>    Donalson    </td>   <td>    duramax </td>   <td>    A0102A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    P164381 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A0102A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    P164352 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A0102A  </td>   <td>    5   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    B76 </td>   <td>    Balwind </td>   <td>    p553191 </td>   <td>    A0102A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    Hf28993 </td>   <td>    Fleetguard  </td>   <td>    0   </td>   <td>    A0102A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    P164352 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A0102A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p573481 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A0102A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    FF5319  </td>   <td>    Fleetguard  </td>   <td>    0   </td>   <td>    A0102A  </td>   <td>    7   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    Hf35305 </td>   <td>    Fleetguard  </td>   <td>    p179343 </td>   <td>    A0102A  </td>   <td>    4   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    557081  </td>   <td>    mannc humel </td>   <td>    p165675 </td>   <td>    A0102A  </td>   <td>    3   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    BT8878-MPG  </td>   <td>    Balwind </td>   <td>    p165675 </td>   <td>    A0102A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p165675 </td>   <td>    Donalson    </td>   <td>    duramax </td>   <td>    A0102A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p165569 </td>   <td>    Donalson    </td>   <td>    duramax </td>   <td>    A0102A  </td>   <td>    3   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    51849   </td>   <td>    WIX </td>   <td>    p165876 </td>   <td>    A0102A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p550252 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A0102A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    6.3464.1    </td>   <td>    kaeser  </td>   <td>    0   </td>   <td>    A0102A  </td>   <td>    2   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    pt9429-mpg  </td>   <td>    Balwind </td>   <td>    0   </td>   <td>    A0102A  </td>   <td>    3   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p165672 </td>   <td>    Donalson    </td>   <td>    unidad 435 duramax  </td>   <td>    A0102A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    551863  </td>   <td>    WIX </td>   <td>    0   </td>   <td>    A0102A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    51849   </td>   <td>    WIX </td>   <td>    alta frecuencia No. 1   </td>   <td>    A0102A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    57809   </td>   <td>    WIX </td>   <td>    0   </td>   <td>    A0102A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    164166  </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A0102A  </td>   <td>    3   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p1670610    </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A0102A  </td>   <td>    2   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    p786889 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A0102A  </td>   <td>    3   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    293-3645    </td>   <td>    CAT </td>   <td>    yucle 7756  </td>   <td>    A0102A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    EFM-252-FILMTY  </td>   <td>    0   </td>   <td>    0   </td>   <td>    A0102A  </td>   <td>    2   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    EFM-250-FILMTY  </td>   <td>    0   </td>   <td>    0   </td>   <td>    A0102A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    P550900 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A0102A  </td>   <td>    5   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    FF5317  </td>   <td>    Fleetguard  </td>   <td>    0   </td>   <td>    A0102B  </td>   <td>    3   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    LF691A  </td>   <td>    Fleetguard  </td>   <td>    0   </td>   <td>    A0102B  </td>   <td>    3   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    P550523 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A0103A  </td>   <td>    6   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    HF6376  </td>   <td>    Fleetguard  </td>   <td>    P550523 </td>   <td>    A0103A  </td>   <td>    4   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    LF519   </td>   <td>    Fleetguard  </td>   <td>    0   </td>   <td>    A0103A  </td>   <td>    2   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    LF-723  </td>   <td>    Fleetguard  </td>   <td>    0   </td>   <td>    A0103A  </td>   <td>    2   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    HF 30233    </td>   <td>    Fleetguard  </td>   <td>    P567027 </td>   <td>    A0103A  </td>   <td>    3   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    P556700 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A0103A  </td>   <td>    2   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    P550921 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A0103A  </td>   <td>    2   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    PT9444  </td>   <td>    Balwind </td>   <td>    PALA 988H 01 y 02   </td>   <td>    A0103A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    51204   </td>   <td>    WIX </td>   <td>    IR0735  </td>   <td>    A0103A  </td>   <td>    3   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    57896   </td>   <td>    WIX </td>   <td>    1799806 </td>   <td>    A0103A  </td>   <td>    2   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    51195   </td>   <td>    WIX </td>   <td>    IR0732  </td>   <td>    A0103A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    BQ104527130 </td>   <td>    Blum99  </td>   <td>    3375270 </td>   <td>    A0103A  </td>   <td>    3   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    P165142 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A0103A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    557108  </td>   <td>    WIX </td>   <td>    P551334 </td>   <td>    A0103A  </td>   <td>    2   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    P551210 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A0103A  </td>   <td>    3   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    P165142 </td>   <td>    Donalson    </td>   <td>    0   </td>   <td>    A0103A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    BF9903-SP   </td>   <td>    Balwind </td>   <td>    0   </td>   <td>    A0109B  </td>   <td>    4   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    57792   </td>   <td>    WIX </td>   <td>    0   </td>   <td>    A0109B  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    46589   </td>   <td>    WIX </td>   <td>    0   </td>   <td>    A0109B  </td>   <td>    2   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    57792   </td>   <td>    WIX </td>   <td>    IR1808  </td>   <td>    A0109B  </td>   <td>    3   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    51849   </td>   <td>    WIX </td>   <td>    1329214C1   </td>   <td>    A0109A  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    D83A10GAV   </td>   <td>    WIX </td>   <td>    Terex canica    </td>   <td>    A0109A  </td>   <td>    3   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    20353237    </td>   <td>    Coredril    </td>   <td>    P551067 </td>   <td>    A0109A  </td>   <td>    2   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    202056  </td>   <td>    Coredril    </td>   <td>    0   </td>   <td>    A0109A  </td>   <td>    2   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    202055  </td>   <td>    Coredril    </td>   <td>    0   </td>   <td>    A0109A  </td>   <td>    2   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    RS3700  </td>   <td>    Balwind </td>   <td>    EXCAVADORA 385 No.1 </td>   <td>    A0109C  </td>   <td>    0   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    RS3712  </td>   <td>    Balwind </td>   <td>    Bulldozer D9T No. 1 </td>   <td>    A0109C  </td>   <td>    1   </td>   <td>    02/03/2026  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+    <tr>    <td>    BF9903-SP   </td>   <td>    0   </td>   <td>    0   </td>   <td>    0   </td>   <td>    0   </td>   <td>    00/01/1900  </td>   <td><span class="status-badge ok">  DISPONIBLE  </span></td>    </tr>
+
+   
+
+
+    </tbody>
+</table>
+
+<script>
+function filterTable() {
+    let input = document.getElementById("searchInput");
+    let filter = input.value.toUpperCase();
+    let table = document.getElementById("inventoryTable");
+    let tr = table.getElementsByTagName("tr");
+
+    for (let i = 1; i < tr.length; i++) {
+        let textContent = tr[i].textContent.toUpperCase();
+        if (textContent.indexOf(filter) > -1) {
+            tr[i].style.display = "";
+        } else {
+            tr[i].style.display = "none";
+        }
+    }
+}
+</script>
+
+</body>
+</html>
